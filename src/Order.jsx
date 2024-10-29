@@ -22,6 +22,23 @@ export default function Order() {
     );
   }
 
+  async function checkout() {
+    setLoading(true);
+
+    await fetch("/api/order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        cart,
+      }),
+    });
+
+    setCart([]);
+    setLoading(false);
+  }
+
   async function fetchPizzaTypes() {
     const pizzaResponse = await fetch("/api/pizzas");
     const pizzaJson = await pizzaResponse.json();
@@ -115,7 +132,7 @@ export default function Order() {
           )}
         </form>
       </div>
-      {loading ? <h2>LOADING …</h2> : <Cart cart={cart} />}
+      {loading ? <h2>LOADING …</h2> : <Cart cart={cart} checkout={checkout}/>}
     </div>
   );
 }
